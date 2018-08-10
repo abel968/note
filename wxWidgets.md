@@ -20,6 +20,14 @@
 
 ## 开始使用
 ### App类
+- 关于头文件
+  ```c++
+  #include <wx/wxprec.h>
+
+  #ifndef WX_PRECOMP
+    #include <wx/wx.h>
+  #endif
+  ```
 - 每个wxWidgets程序需要定义一个wxApp的子类，并且要创建且只能创建一个这个类的实例。这个类至少要定义一个OnInit函数，运行时将会调用这个函数。
 - Oninit函数将会创建至少一个窗口实例，并进行初始化，若函数返回真wxWidgets将开始事件循环接收用户输入并处理。若返回假wxWidgets将释放内部分配的资源，结束程序运行。
 - 宏wxT作用是兼容Unicode模式。如：`wxT("Minimal wxWidgets App")``
@@ -115,7 +123,84 @@ frame->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyF
   **窗口的可见性：** 若创建的窗口的父窗口是可见的，那它也总是可见的，可以通过`Show(false)`使它不可见。而wxDialog和wxFrame这样的顶层窗口，在创建时通常是不可见的，这样可以避免在绘制那些子窗口和排列子控件的时候发生闪烁。需要通过Show或者ShowModel的调用让它可见。
   **窗口的删除：** 窗口调用Destroy函数（对于顶层窗口）或者delete函数（对于其子窗口）来释放的。在窗口刚刚要被释放之前调用wxEVT_DESTROY事件。子窗口是被自动释放的，所有delete函数是很少调用的。
 - 窗口类型：设置窗口类型是设置窗口创建时的行为和外观的一种简介的方法。
-### 窗口类概览
+### 基础窗口类
+- wxWindow 
+  wxWindow类一定要有一个非空父窗口，否则运行时会有断言错误
+  ```c++
+  wxWindow(wxWindow* parent,
+  wxWindowID id,
+  const wxPoint& pos = wxDefaultPosition,
+  const wxSize& size = wxDefaultSize,
+  long style = 0;
+  const wxString& name = wxT("panel"));
+  ```
+  **基本窗口类型 P61**  
+  **wxWindows相关事件 P63**
+- wxWindow实现的成员函数可以方便的被其子类掉用
+  1. CaptureMouse / ReleaseMouse / GetCapture / HasCapture  
+     前两个可以捕获/释放鼠标。在绘图时，可以让鼠标不移出去。GetCapture获取当前正在使用的捕获设备。HasCapture检测鼠标是否被该窗口捕获。
+  2. Centre, CentreOnParent, CentreOnScreen  
+    调整自己位置位于父窗口或屏幕中心
+  3. ClearBackground 使用当前背景色清除窗口
+  4. ClientToScreen / ScreenToClient 将坐标在屏幕坐标系和客户区坐标系相互转换。
+  5. Close函数产生一个wxCloseEvent事件
+  6. ConvertDialogToPixels 和 ConvertPixelsToDialog函数可以对数值进行对话框单位和像素单位的转为。
+  7. Destroy安全的释放窗。
+  8. Enable(bool) 允许或禁止窗口及其子窗口处理输入事件。Disable函数和Enable函数功能一样，即两者使用false作为参数的效果是完全一样的。
+  9. FindFocus函数是一个静态函数，可以找到当前拥有键盘焦点的窗口。
+  10. FindWindow函数通过标识符或者名字在窗口关系树中寻找某个窗口，返回值可能为它的本身或子窗口。若确定要找的窗口类型，可以**安全的使用wxDynamicCast进行类型强制转换**，转换的结果是一个指向该类型的指针或NULL。如：`MyWindow* window = wxDynamicCast(FindWindow(ID_MYWINDOW), MyWindow);`
+  11. Fit函数会自动改变窗口大小来容纳其子窗口，被应用在基于sizer布局时。FitInsid函数类似，区别在于它使用的是虚大小(应用在那些包含滚动条的窗口)
+  12. Freeze / Thaw 告诉wxWidgets，在这两个函数之间进行的刷新界面的操作是允许被优化的。如要在文本框控件逐行加入多行文本，可以用该方法优化显示效果，避免闪烁。
+  13. GetAcceleratorTable / SetAcceleratorTable获取和设置某窗口的加速键表。
+  14. GetBackgroundColour / SetBackgroundColour 访问窗口的背景颜色属性。该属性被wxEVT_ERASE_BACKGOUND事件用来绘制背景。修改后应调用Refresh或ClearBackground函数来刷新北京。**SetOwnBackgroundColour**作用与SetBackgroundColour基本相同，但前者不会更改当前窗口的子窗口背景属性。
+  15. GetBestSize函数以像素为单位返回窗口最适合的大小。
+  16. GetCaret / SetCaret函数访问或者设置窗口光标
+  17. GetClientSize /SetClientSize访问客户去大小
+  18. GetCursor / SetCursor访问鼠标
+  19. GetDefaultItem 返回指向该窗口默认子按钮的指针或者NULL。默认子按钮指的是按回车键时默认激活的按钮。可以通过wxButton::SetDefault函数进行设置。
+  20. GetDropTarget / SetDropTarget函数访问wxDropTarget对象，该对象用来处理和控制窗口的拖放操作。
+  21. GetEventHandler / SetEventHandler 访问窗口的第一事件表。默认是窗口自己，但可以指定不同的事件表，或通过PushEventHandler和PopEventHandler函数设置事件表链。
+  22. GetExtraStyle / SetExtraStyle 访问窗口的扩展类型风格。
+  23. GetFont / SetFont 访问与窗口相关的字体。**SetOwnFont**功能与SetFont相似，前者设置的字体不会被子窗口继承。
+  24. GetForegroundColour / SetForegroundColour访问窗口的前景颜色属性。**SetOwnForegroundColour**不会改变子窗口的属性。
+  25. GetHelpText / SetHelpText 访问窗口相关的上下文帮助
+  26. GetId / SetId 访问窗口标识符
+  27. GetLabel / SetLabel 访问标签
+  28. GetName / SetName 访问窗口名称
+  29. GetParent
+  30. GetPosition返回相对于父窗口的窗口左上标
+  31. GetRect 返回wxRect 包含窗口大小和位置
+  32. GetSize / SetSize
+  33. GetSizer / SetSizer 访问该窗口绑定的最顶级的窗口布局对象
+  34. GetTextExtent 返回当前字体下某个字符串的像素长度
+  35. GetToolTip/SetToolTip  访问tooltip
+  36. GetUpdateRegion 返回窗口自上次Paint事件以来需要刷新的区域
+  37. GetValidator / SetBalidator
+  38. GetVirtualSize 窗口的虚大小
+  39. GetWindowStyle / SetWindowStyle操作窗口类型比特位
+  40. InitDialog发送一个wxEVT_INIT_DIALOG事件来开始对话框数据的传送
+  41. IsEnabled检测当前窗口的使能状态
+  42. IsExposed检测一个点或一个矩形区域是否位于需要刷新的范围
+  43. IsShown用来指示窗口是否可见
+  44. IsTopLever指示是否顶层窗口。(**仅用于wxFrame或wxDialog**)
+  45. Layout函数用来在窗口已指定一个布局对象的情况下更新窗口布局
+  46. Lower/Raise函数将窗口移到窗口树的最底/顶层
+  47. MakeModal禁用其他所有顶层窗口，以便用户只能和当前顶层窗口交互
+  48. Move用来移动窗口
+  49. MoveAfterInTabOrder/MoveBeforeInTabOrder更改窗口的TAB顺序到作为参数的窗口的后/前面
+  50. PushEventHandler压入一个事件表到当前的事件表栈，PopEventHandler弹出且返回事件表栈最顶层的事件表，RemoveEventHandler查找事件表中的一个事件表并将其出栈
+  51. PopupMenu在某位置弹出菜单
+  52. Refresh / RefreshRect函数导致窗口收到一个重画事件
+  53. SetFocus函数让本窗口收到键盘焦点
+  54. SetScrollbar函数用来设置窗口内建的滚动条属性
+  55. SetSizeHints函数用来定义窗口的最小最大尺寸
+  56. Show函数显示/隐藏窗口  Hide相当于Show(false)
+  57. transferDataFromWindow / transferDataToWindow
+  58. Update立刻重画窗口已过期区域
+  59. UpdateWindowUI发送wxUpdateUIEvents事件到窗口
+  60. Validate使用当前的验证对象验证窗口数据
+
+
 ## 绘画和打印
 
 
