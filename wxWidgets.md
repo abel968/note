@@ -199,6 +199,10 @@ frame->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyF
   58. Update立刻重画窗口已过期区域
   59. UpdateWindowUI发送wxUpdateUIEvents事件到窗口
   60. Validate使用当前的验证对象验证窗口数据
+- wxControl是虚类，继承自wWindow，是控件的基类。
+- wxControlWithItem是一个包含多个数据项的控件的虚类，（**如wxListBox, wxCheckListBox, wxChoice, wxComboBox**）。**P66-67**
+### 顶层窗口
+- 顶层窗口直接被放置在桌面上而不是包含在其他窗口之内。wxFrame wxDialog都是从虚类wxTopLeverWindow继承的。wxPopupWindow是直接从wxWindow继承的。**模式对话框**指对话框弹出时，程序除了等待用户关闭对话框外不再做别的事。wxApp::GetTopWindow得到程序的主窗口，主窗口指的是程序中创建的第一个frame窗口或dialog窗口;全局变量wxTopLeverWindow访问所有顶层窗口，它是一个wxWindowList类型。
 
 
 ## 绘画和打印
