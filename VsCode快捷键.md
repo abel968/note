@@ -18,7 +18,7 @@
 | alt + 左/右箭头 | 向左/右切换标签页 |
 | Ctrl + f/h | |
 | F3/shift+F3 | 找到后/前一个 |
-| alt|enter | 在ctrl+f后使用，可以在所有搜索到的后面添加光标 |
+| alt+enter | 在ctrl+f后使用，可以在所有搜索到的后面添加光标 |
 | alt+鼠标左键 | 可以出现多个光标 |
 | shift+alt+鼠标左键 |  |
 | ctrl + space | 触发提示 |
@@ -47,6 +47,9 @@
 | F10 | Step over |
 | Ctrl+k, Ctrl+i | show hover |
 | Ctrl+whitespace | 触发自动补全 |
+| Ctrl+上/下箭头 | 滚动页面 |
+| Ctrl+` | 显示终端 |
+
 
 
 # VsCode c++ 配置
