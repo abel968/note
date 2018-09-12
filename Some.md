@@ -35,3 +35,11 @@
 ## 深拷贝，浅拷贝
 ## 右引用
 ## new 定位
+## exit(EXIT_FAILURE)
+## c++如何优化声明为unexpect的函数
+## c++是否应该把所有函数声明为unexpect 以得到编译优化
+## 栈解退
+## RTTI是什么？
+## weak_ptr智能指针
+## for_each函数
+
