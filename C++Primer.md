@@ -402,12 +402,17 @@
   2. cout wcout
   3. cerr wcerr 这个流没有被缓冲，信息将被直接发送给屏幕
   4. clog wclog 也对应着标准错误流
+- 如果要获得字符数组的地址，可以强制转换成`void*` 用cout打印地址
+- ostream类还提供put() write() 分别显示字符和字符串，与`<<`一样 也返回一个指向调用对象的引用。如：`cout.put('a'); cout.write(ch, 4);` write第一个参数为字符串地址，第二个参数为输出字符串长度，且不会在遇到空字符串时自动停止打印字符，只是打印指定数目的字符，即使超出边界。
+- 刷新cout缓冲区的两种方式。`cout<<flush; flush(cout)`
+- 浮点类型被显示为6位，末尾的0不显示，当指数大于等于6或小于等于-5时，将用科学计数法表示
+- 使用cout格式化：
+  1. dec, hex, oct 十进制、十六进制、八进制。 用法两种，如：`hex(cout); cout<<hex;`
+  2. `cout.width()`返回字段宽度的当前设置；`cout.width(int i)`将字段宽度设置为i个空格，但只影响下一次输出，输出之后又恢复为默认值
+  3. `cout.fill('*')`为修改填充字符。默认为空格，填充字符一直有效
+  4. c++的默认精度为6位。`cout.precision(2)`设置cout的精度为2，新的精度设置一直有效。精度指的是有效数字
+  5. `cout.setf(ios_base::showpoint)`打印末尾的0和小数点  `ios_base::boolalpha`输入输出的bool值显示为true或false; `ios_base::showbase`使用c++基数前缀(0,0x) `ios_base::uppercase`对于16进制输出使用大写字母 `ios_base::showpos`正数加上+
+- 可以hex、oct、dec与cin一起使用。cin
 - 
-
-
-
-
-
-
 
 
