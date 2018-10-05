@@ -8,6 +8,7 @@
 - 以及hash_set unordered_set
 - hash_map用法
 - 二分查找
+- `int gcd(int a, int b){ return a == 0 ? b : gcd(b % a, a); }`
 
 
 ## 7 Reverse Integer
@@ -109,8 +110,8 @@
 - [巧妙方法](https://leetcode.com/problems/move-zeroes/solution/)
 
 ## 374 Guess Number Higher or Lower
-- 使用`mid=start+(end-start)/2` 而不用`mid = (start+end)/2` 是为了防止越界
-
+- 使用`mid=start+(end-start)/2` 而不用`mid = (start+end)/2` 是为了防止越界 
+ 
 ## 441 Arranging Coins
 - 使用二分查找更快
 
@@ -125,3 +126,18 @@
 
 ## 563 Binary Tree Tilt
 - 题目没懂
+
+## 784 Letter Case Permutation
+- 不会写 [解法](https://leetcode.com/problems/letter-case-permutation/discuss/176493/C++-no-dfs-no-dp-O(1)-space-4ms-beats-100)
+
+## 796 Rotate String
+- 更好的解法 [KMP](https://leetcode.com/problems/rotate-string/description/)
+
+## 812 Largest Triangle Area
+- [三角形已知三点坐标 求面积公式](https://zhidao.baidu.com/question/93368735.html)
+
+## 	836	Rectangle Overlap    
+- 有很简单的方法
+
+## 893 Groups of Special-Equivalent Strings
+- 有复杂度更低的方法，用一个大小为52的int数组来记录对应字母出现几次。奇数位的字母值比偶数位同一个字母多26
