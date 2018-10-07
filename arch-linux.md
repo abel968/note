@@ -25,14 +25,15 @@
 
 
 ## 安装fcitx中文输入法
-pacman -S fcitx fcitx-googlepinyin fcitx-configtool fcitx-gtk2 fcitx-gtk3 fitx-qt4
+pacman -S fcitx fcitx-googlepinyin fcitx-configtool fcitx-gtk2 fcitx-gtk3 fcitx-qt4
 启动fcitx-configtool添加中文输入法
 
-在~/.xinitc中加入:
+在/etc/environment中加入:
 ```
-export LC_ALL=zh_CN.UTF-8
-export XMODIFIERS=@im=fcitx
-eval `dbus-launch --sh-syntax --exit-with-session`
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+
 ```
 
 ## vim-fcitx安装  (使用PKGBUILD)
@@ -53,3 +54,14 @@ ss-local -c /etc/shadowsocks/config.json 以该文件为配置开启shadowsock
 systemctl start shadowsocks@config    (config为/etc/shadowsocks/config.json)
 
 google-chrome-unstable --proxy-server=socks5://127.0.0.1:1080
+
+## tim
+sudo vim /etc/pacman.conf
+去掉multilib注释
+sudo pacman -Syu
+sudo pacman -S deepin-wine-tim
+
+## 开启vpn-pptp
+sudo pacman -S networkmanager-pptp pptpclient networkmanager
+sudo pacman -S networkmanager-openvpn
+systemctl restart NetworkManager
