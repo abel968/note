@@ -2,6 +2,7 @@
   `lower_bound(begin, end, num)`从begin 到end-1位置查找 第一个大于等于num的数字
 - trie 字典树
 - 图是否有环 [方法](https://www.cnblogs.com/TenosDoIt/p/3644225.html)
+- c++ STL中有heap模板，可以学习使用一下。。。
 
 
 ## 11 Container With Most Water
@@ -92,3 +93,7 @@
 
 ## 201 Bitwise AND of Numbers Range
 - 不会 [elegant 方法](https://leetcode.com/problems/bitwise-and-of-numbers-range/discuss/56746/One-line-C++-solution)
+
+## 215 Kth Largest Element in an Array
+- 直接sort时间复杂度为O(nlogn) 使用堆排序，维护大小为k的heep，时间复杂度为O(nlogk) [大致写法](https://leetcode.com/problems/kth-largest-element-in-an-array/discuss/177587/18-line-Java-Solution-with-heap)
+- c++ STL中有heap模板，可以学习使用一下。。。
