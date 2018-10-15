@@ -2,6 +2,8 @@
   `lower_bound(begin, end, num)`从begin 到end-1位置查找 第一个大于等于num的数字
 - trie 字典树
 - 图是否有环 [方法](https://www.cnblogs.com/TenosDoIt/p/3644225.html)
+- 桶排序 复杂度为O(n)
+- stringstream  istringstream
 
 
 ## 11 Container With Most Water
@@ -92,3 +94,13 @@
 
 ## 201 Bitwise AND of Numbers Range
 - 不会 [elegant 方法](https://leetcode.com/problems/bitwise-and-of-numbers-range/discuss/56746/One-line-C++-solution)
+
+## 220 Contains Duplicate III
+- 使用桶排序，复杂度为O(n)
+
+## 221 Maximal Square
+- **没有想到** [dp解法](https://leetcode.com/problems/maximal-square/solution/)
+
+## 227 Basic Calculator II
+- 不会 [方法](https://leetcode.com/problems/basic-calculator-ii/discuss/63004/17-lines-C++-easy-20-ms)
+- 利用istringstream
