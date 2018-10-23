@@ -2,12 +2,9 @@
   `lower_bound(begin, end, num)`从begin 到end-1位置查找 第一个大于等于num的数字
 - trie 字典树
 - 图是否有环 [方法](https://www.cnblogs.com/TenosDoIt/p/3644225.html)
-<<<<<<< HEAD
 - 桶排序 复杂度为O(n)
 - stringstream  istringstream
-=======
 - c++ STL中有heap模板，可以学习使用一下。。。
->>>>>>> e1f4082b352b9defc151720cb85a3334c90a94ed
 
 
 ## 11 Container With Most Water

@@ -25,5 +25,14 @@
   2. 也可以不自己设定bins. 如 `pd.cut(data, 4, precision=2)`  表示分成4组, 精确到小数点后2位.
   3. qcut, 会按照数据的分布来分箱, 得到每个bins具有相同数量的点. 如 `pd.qcut(data, 4)` 分成4个数据个数相同的组.
   4. cut中我们可以自己指定百分比 如: `pd.cut(data, [0, 0.1, 0.5, 0.9, 1.])`
-
+- numpy.random.permutation 随机排序函数. 
+  ```python
+  sampler = np.random.permutation(5)  # 假设生成的随机序列为 [4,2,3,1,0]
+  df.take(sampler) # 行的顺序按照该序列.
+  ```
+- sample函数可以返回一个随机子集. 如`df.sample(4)` 返回4*4的子集. 默认是不重复的, 若想允许重复可以设置参数replace=True
+- pd.get_dummies
+- df.columns.get_indexer
+- df.add_prefix
+- pd.get_dummies(pd.cut(values, bins))
 
