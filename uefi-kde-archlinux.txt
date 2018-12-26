@@ -1,0 +1,113 @@
+安装环境 T430
+安装时间 2017.5.8
+启动方式UEFI
+空间256G
+安装过程
+连接网线
+ping archlinux.org
+timedatectl set-ntp true
+fdisk -l
+fdisk /dev/sda
+g 创建gpt格式硬盘
+n 创建分区
+t 更改分区格式
+512m efi system
+8g swap
+other root
+w 保存分区
+mkfs.fat -F32 /dev/sda1 #格式化fat32
+mkswap /dev/sda2
+swapon /dev/sda2
+mkfs.ext4 /dev/sda3
+mount /dev/sda3 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+
+vim /etc/pacman.d/mirrorlist # 把china镜像放在最前面
+pacstrap /mnt base # 安装
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+hwclock --systohc
+vim /etc/locale.gen # 把en_US.UTF-8 UTF-8注释去掉
+locale-gen
+vi /etc/locale.conf # 添加
+LANG=en_US.UTF-8
+vi /etc/hostname # 添加
+miaoarch
+vi /etc/hosts # 添加
+127.0.1.1	miaoarch.localdomain	miaoarch
+passwd #输入root密码
+
+pacman -S grub efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+exit
+umount -R /mnt
+reboot
+
+systemctl enable dhcpcd
+systemctl reboot
+systemctl poweroff
+
+pacman -S openssh vim
+systemctl enable sshd
+vim /etc/ssh/sshd_config
+
+useradd -m -g users -s /bin/bash -G audio,video,lp,optical,wheel,power,scanner,storage,games sos_yuki_n
+
+passwd sos_yuki_n
+
+pacman -S sudo
+sudo -1U sos_yuki_n
+visudo # 添加
+sos_yuki_n ALL=(ALL) ALL
+
+pacman -S xorg-server xorg-xinit//x服务
+pacman -S xf86-input-synaptics
+pacman -S mesa//3d性能
+pacman -S nvidia-dkms
+
+pacman -S plasma//基础包
+pacman -S plasma-meta//完整包
+pacman -S plasma-desktop//最简安装（仅有桌面软件）
+pacman -S sddm
+systemctl enable sddm
+
+//配置WIFI
+sudo pacman -S wireless_tools
+wifi-menu
+sudo cp /etc/netctl/examples/wireless-wpa /etc/netctl/your_profile
+// sudo vim /etc/netctl/your_profile
+
+netctl start your_profile
+netctl enable your_profile
+
+//rf-kill
+rfkill list all
+rfkill unblock 2
+
+iwconfig
+ip link set wlp3s0 up
+iwlist wlp3s0 scan | grep "ESSID"
+ip link set wlp3s0 down
+
+
+//qt5
+sudo pacman -S qt5
+sudo pacman -S qtcreator
+//yaourt
+[archlinuxcn]
+#The Chinese Arch Linux communities packages.
+SigLevel = Optional TrustedOnly
+Server   = http://repo.archlinuxcn.org/$arch
+
+pacman -Syu yaourt
+yaourt -Ss chrome
+pacman -S google-chrome-beta
+
+pacman -S linux-headers
+
+pacman -S alsa-lib alsa-utils alsa-oss
+pacman -S xf86-video-intel

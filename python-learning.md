@@ -3,7 +3,7 @@
 - pandas.Series value_counts()
 - 字典的get函数  
 - pandas中的isin(). 没有isnotin，它的反函数就是在前面加上~ 
-- pandas中的cut
+- pandas中的cut qcut
 - pandas中的pivot_table [透视表](https://www.cnblogs.com/onemorepoint/p/8425300.html)
 - dataframe2[column]能应对任何列名，但dataframe2.column的情况下，列名必须是有效的python变量名才行. 如当列名为整型时只能使用中括号
 - DataFrame也可以向numpy数组一样做转置
@@ -25,15 +25,16 @@
   ```
 - dataframe的corr和cov方法，能返回一个关于列索引属性之间的完整的相似性或方差矩阵. 若只想得到列标签中某两个属性之间的相似度或方差, `data['MSFT'].corr(data['IBM'])`  `data['MSFT'].cov(data['IBM'])`
 - Dataframe的corrwith方法可以得到所有列索引属性与Series或Dataframe的相似度, 如: 和Series `data.corrwith(data['IBM'])`; 和Dataframe `data.corrwith(data2)` 要求data2列索引与data一致
-- 
+- 从pd.Series中随便抽取 s1.sample(5) 抽取5个样本.
+- dataframe 中的groupby的参数可以是函数.
+- np.average 可以设置参数weights来进行加权平均.
+- pivot_table
 
 ## 基础
 - ord(x) 将一个字符转换为它的整数值  chr(x) 将一个整数转换成一个字符
-- python的变量在内存中只是一个标签，变量改变内容时，其内存的值不会改变，而是将标签贴到其他内存位置上。`type`可以查看对象的类型
 - python3之后没有溢位问题，即存储整数大小无上限，取决自身内存限制
-- 可以使用乘号快速建立重复字符串。如：`a = 'a'*5`
 - `a = 'abcde'; print(a[::-1])` 输出edcba
-- 字符串`name='Henny'`不可以使用`name[0]='P'`来替换，应该使用`name.replace('H', 'P')`。因为变量内的字符串属于不能替换内容，类似tuples
+- 字符串`name='Henny'`不可以使用`name[0]='P'`来替换，应该使用`name.replace('H', 'P')`, 第三个参数可以指定最大替换次数. 因为变量内的字符串属于不能替换内容，类似tuples
 - `len(string)` `string.split(',')`分割字符串，默认参数会切割换行、tab和空格三种。
 - 按照某个分割符将字符串列表合成一个字符串  使用了string.join(list)方法
   ```python
@@ -97,11 +98,11 @@
   7. lambda 如: `lambda word: word.capitalize() + '!'`
   8. generator 生成器式用来创建一个序列Object，但是又可以不用事前将一整个序列存到内存中，会随着每一次执行而改变数值
      内建的range()就是一个生成器. 生成器其实也是使用定义函数的方式定义, 只是将return改成yield. 则当执行到yield的位置时返回, 当再次调用生成器时, 从yield位置继续执行
-  9. decorators [装饰器](https://foofish.net/python-decorator.html)
+  9. decorators [装饰器](https://foofish.net/python-decorator.html)  类装饰器主要靠类的__call__方法. functools.wraps装饰器将原函数的信息(如 __name__ __doc__ 等)拷贝到装饰器函数中.
 - main函数中的变量称为全局变量, 可以在函数中调用, 但不能改变它, 若试图改变会报错. 若想在函数内部改变全局变量, 可以使用global
 - try:..........except:...........
 ## 模块 包 程序
-- 命令行参数  `import sys` `prin(sys.argv[1])`
+- 命令行参数  `import sys` `print(sys.argv[1])`
 - import会默认搜索主程序相同路径的目录, 没有则搜索安装目录的/lib目录
 - packages打包. 将函数库用文件夹管理. 比如一个sources目录, 其中有三个文件: __init__.py, daily.py, weekly.py 其中后两个中定义了对应函数, __init__.py时一个空文件, 目的是让python将sources视为一个函数库使用. 然后主程序可以使用import导入sources中的函数
 - python标准库........
@@ -111,8 +112,10 @@
 - 使用property() 来隐藏属性值, getter setter **还不太懂**
 - 在属性前面加上__来重整名称, 虽不能完全防止修改私有属性, 但可以降低无意的修改. 如类A中的变量__name, 则调用时应使用_A__name
 - 类的属性和方法. 类的属性声明直接写在类中, 调用使用`类.属性`的方式. 类的函数在声明时前面加`@classmethod` 或者 `@staticmethod`, 差异是前者第一个参数需为cls参数, 后者不需要, 所以后者调用该类的属性只能直接用名称取得, 后者因为有cls参数传入, 所以不需要.
+- 实例对象无法更改类属性,如果强写 对象.类属性 = xxx 只是给这个对象添加了一个实例变量,而实例变量的名字恰好等于类属性罢了 类属性的值是不会变的
+- python实例化对象可以直接增加属性. 若想禁止这个功能, 可以在自定义类中添加属性`__slots__ = {}`  大括号中的值表示允许添加的属性名.
 - 多态, 不管object本身的类型是什么, 只要拥有相同的方法就可以调用到
-- 特殊方法(以__开头和结尾的方法)
+    - 特殊方法(以__开头和结尾的方法)
   |方法名称|调用|
   |:-:|:-:|
   |__eq__(self, other)|self == other |
@@ -177,7 +180,7 @@
 
 ## numpy
 - ndarray n维数组对象 其所有元素必须是相同类型, 且有两个属性: shape表示维度, dtype表示数组类型. 可以使用np.array(list1)创建ndarray
-- np.random.randn(2, 3) 返回2*3的随机矩阵
+- np.random.randn(2, 3) 返回2*3的随机矩阵   randn是标准正态分布, rand是返回[0,1)中的值
 - np.zeros(10) np.zeros((3, 6)) np.empty((2,3,2)) np.arange(15), ones, ones_like以另一个数组为参数根据其形状和dtype创建全1的数组, zeros_like, empty_like, full, full_like, eye, identity
 - dtype  例: `np.array([1,2,3], dtype = np.float64)`
 - ndarray 的astype方法可以转换dtype 如: `arr.astype(np.float64)`
@@ -237,7 +240,7 @@
 - 使用pandas查询数据
   1. df1.head() df1.tail() 可以默认查询数据的前5行或最后5行, 若加int参数为指定行数.
   2. 查询指定的行, 使用loc.  df1.loc[[0,2,3]] 表示查询0 2 3行
-  3. 查询指定的列, 使用      df1[['Name', 'Height']]表示查询标签为'Name'和'Height'的类
+  3. 查询指定的列, 使用      df1[['Name', 'Height']]表示查询标签为'Name'和'Height'的列
   4. 也可以使用loc索引标签查询指定列. 如 df1.loc[:, ['Name', 'Height']]
   5. 还可以做判断, 如查询所有12岁以上的女生信息, 可以使用 `student[(student['Sex']=='F') & (student['Age']>12)]`  如果是多个条件的查询, 必须在 & 或者 | 两端用括号括起来
 - 统计分析

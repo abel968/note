@@ -43,3 +43,12 @@
 ## weak_ptr智能指针
 ## for_each函数
 
+
+# Python
+- 矩阵连接四种方式. https://blog.csdn.net/xiaodongxiexie/article/details/71774466
+- zip为什么只能使用一次. https://blog.csdn.net/benpaodelulu_guajian/article/details/81869462
+- pandas read_csv 当csv文件没有列名时, 将会把第一行数据当作列名, 此时有两种解决办法. header 和 names
+- pandas `k = df['attribute'].values`   不会创建新的副本
+- pandas 和 numpy 中的std有什么区别  https://blog.csdn.net/heisyi/article/details/54948969
+- numpy 中的 reshape 返回的是引用还是复制?
+$$g(z) = \frac{1} {1+e^{-z}$$
