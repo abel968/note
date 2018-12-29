@@ -5,6 +5,9 @@
 - 桶排序 复杂度为O(n)
 - stringstream  istringstream
 - c++ STL中有heap模板，可以学习使用一下。。。
+- Segement Tree(线段树)  每个节点代表一个区间, 含有属性(start, end, left, right, max/min/sum) 每个节点的左右子节点均分该区间. 创建该树O(n) 更新数O(logn) 求和O(logn)
+- 
+- 
 
 
 ## 11 Container With Most Water
@@ -109,3 +112,6 @@
 ## 227 Basic Calculator II
 - 不会 [方法](https://leetcode.com/problems/basic-calculator-ii/discuss/63004/17-lines-C++-easy-20-ms)
 - 利用istringstream
+
+## 307
+- 暴力能过..但是可以使用线段树或者树状数组
