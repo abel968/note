@@ -35,4 +35,47 @@
 - df.columns.get_indexer
 - df.add_prefix
 - pd.get_dummies(pd.cut(values, bins))
+- strip() 去除字符串的空格．
+- 可以把一些字符串方法和正则表达式（用lambda或其他函数）用于每一个value上，通过data.map，但是这样会得到NA(null)值。为了解决这个问题，series有一些数组导向的方法可以用于字符串操作，来跳过NA值。这些方法可以通过series的str属性．　如: `s1.str.contains('gmail')`检查每个元素是否包含gmail, 若元素为NaN, 则返回也为NaN
+- Hierarchical Indexing. 给出一个简单的例子，构建一个series，其index是a list of lists:
+  ```python
+  data = pd.Series(np.random.randn(9),
+                 index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
+                        [1, 2, 3, 1, 3, 1, 2, 2, 3]])
+  print(data['b']) # 对于这种分层索引, 可以进行部分索引, 如此时输出: 1 随机数  2 随机数
+  ```
+- 可以用unstack来把分层索引进行重新排列，产生一个DataFrame. 同样可以用stack()把DataFrame变成分层索引
+- `pd.MultiIndex.from_arrays([['Ohio', 'Ohio', 'Colorado'], ['Green', 'Red', 'Green']], names=['state', 'color'])`
+- swaplever
+- sort_index是在一个层级上，按数值进行排序. 在交换层级的时候，通常也会使用sort_index，来让结果按指示的层级进行排序
+- 在DataFrame和Series中，一些描述和归纳统计数据都是有一个level选项的，这里我们可以指定在某个axis下，按某个level（层级）来汇总
+- 把DataFrame里的一列或多列作为行索引. 如: `frame2 = frame.set_index(['c', 'd'])` 将c和d列作为行索引. reset_index()功能与set_index相反, 将行索引变成列.
+- 注意：当我们讲列和列进行连接时，DataFrame中的index对象会被丢弃。
+- pd.merge  on left_on right_on how suffixes;  right_index left_index是否使用行索引作为键.对于多级行索引作为键, 如right_index=True, 则left_on应该是一个与多级行索引一致的列表
+- DataFrame有一个很便利的join函数, 可以直接用index来连接. 这个也可以用于与其他DataFrame进行连接，要有一样的index但不能有重叠的列 
+- concat 参数:　join join_axes keys names ignore_index
+- combine_first 类似where. 即 = if else
+- pivot   前两个传入的值是列，分别被用于作为行索引和列索引(date是行索引, item是列索引), 最后是一个是可选的value column(值列), 用于填充DataFrame
+- 与pivot相反的操作是pandas.melt
 
+
+## 画图
+- `fig = plt.figure()`   fig.subplot(2,2,1)
+- 因为创建一个带有多个subplot的figure是很常见的操作，所以matplotlib添加了一个方法，plt.subplots 如: `f, axes = plt.subplots(2, 3)`
+- df.plot() df.plot.bar() df.plot.barh()
+- pd.crosstab()  交叉表是用于统计分组频率的特殊透视表, 按类别分组,统计各个分组中产地的频数. 如 `pd.crosstab(df['类别'],df['产地'])`
+- seaborn.......
+
+## 10
+- groupby 参数可以是列名, 也可以是与Series或df长度一致的数组.
+- 可以`for name, group in df.groupby('key1'):` 对应组名和数据块.
+- `pieces = dict(list(df.groupby('key1')))`  一个便利的用法是, 用一个含有数据片段（data pieces）的dict来作为单行指令(one-liner)
+- goupby也可以传dict 用于映射, 如`mapping = {'a': 'red', 'b': 'red', 'c': 'blue', 'd': 'blue', 'e': 'red', 'f': 'blue'}` 则a  b e为一组red, cdf为一组blue
+- 类似于使用dict映射, 也可以使用函数来映射. 
+- 要想按层级分组，传入层级的数字或者名字，通过使用level关键字
+- 想用自己设计的聚合函数，把用于聚合数组的函数传入到aggregate或agg方法即可
+- 可以把多个聚合函数作为一个list传递给agg, 然后会得到一个df, 列名是自动给出的, 若想指定列名, 可以传入一个由tuple组成的list, 每个tuple的格式是(name, function)
+- 若想把不同的函数用到多个列中, 可以传递一个dict给agg, dict包含一个列名和函数的映射关系.
+- 在调用groupby的时候设定as_index=False 可以取消行索引.
+- apply和agg的区别.
+- 

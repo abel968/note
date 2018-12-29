@@ -65,3 +65,15 @@ sudo pacman -S deepin-wine-tim
 sudo pacman -S networkmanager-pptp pptpclient networkmanager
 sudo pacman -S networkmanager-openvpn
 systemctl restart NetworkManager
+
+## 安装百度云 tim wechat
+yaourt bcloud
+pacman -S deepin-wine-tim
+yaourt wechat
+
+## cmake使用指定gcc
+在cmake之前, 使用以下指令指定gcc版本
+``` 
+export CC=/usr/bin/gcc-7
+export CXX=/usr/bin/g++-7
+```
